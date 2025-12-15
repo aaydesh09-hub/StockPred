@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    h1{
+        color: rgb(52, 99, 121);
+        margin-left: 20px;
+        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    }
+    p{
+        color: rgb(52, 99, 121);
+        margin-left: 20px;
+        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    }
+    ul{
+        color: rgb(3, 114, 86);
+        margin-left: 20px;
+        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    }
+    a{
+        color: rgb(3, 114, 86);
+        margin-left: 20px;
+        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    }
+</style>
+<h1>Welcome to Your Finance Chatbot Dashboard</h1>
+<p>Select what you want to do:</p>
+<ul>
+    <li><a href="/chat">Open Chatbot</a></li>
+    <li><a href="/financials">Search Stock Financials</a></li>
+    <li><a href="/data">View Stored Data</a></li>
+</ul>
+{% endblock %}

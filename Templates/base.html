@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<!-- <head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="styles.css">
+</head> -->
+<style>
+    body{
+        background-color: rgb(172, 214, 221);
+    }
+</style>
+<body>
+<nav>
+    <a href="/">Home</a>
+    <a href="/chat">Chatbot</a>
+    <a href="/financials">Financials</a>
+    <a href="/data">Data</a>
+</nav>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

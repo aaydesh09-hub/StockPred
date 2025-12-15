@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Saved Data</h1>
+<form method="post" action="/data" class="data-form">
+    <label for="query">Search inside data:</label>
+    <input id="query" name="query" type="text" placeholder="Enter keyword">
+    <button type="submit">Fetch</button>
+</form>
+{% if query %}
+<p><strong>Showing results for:</strong> {{ query }}</p>
+{% endif %}
+{% if items %}
+    {% for source, rows in items.items() %}
+        <h2>{{ source | capitalize }}</h2>
+        {% if rows %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        {% for col in rows[0].keys() %}
+                            <th>{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            {% for value in row.values() %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    {% endfor %}
+{% else %}
+<p>No data available.</p>
+{% endif %}
+<style>
+.data-form { margin-bottom: 1rem; }
+.data-form input { padding: 0.4rem; margin-right: 0.5rem; }
+.data-table { border-collapse: collapse; width: 100%; margin-bottom: 2rem; }
+.data-table th, .data-table td { border: 1px solid #ddd; padding: 0.5rem; }
+.data-table th { background: #F5F5F5; text-align: left; }
+</style>
+{% endblock %}

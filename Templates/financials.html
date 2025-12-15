@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Financials</h1>
+<form method="post" action="/financials" class="financial-form">
+    <label for="symbol">Ticker symbol (e.g. AAPL):</label>
+    <input id="symbol" name="symbol" type="text" placeholder="Enter ticker symbol" required>
+    <button type="submit">Get Financials</button>
+</form>
+{% if data %}
+<section class="financial-results">
+    <h2>{{ data.get('name') or data.get('symbol') or 'Result' }}</h2>
+    {% if data is mapping %}
+    <table class="financial-table">
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for key, value in data.items() %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>
+                    {% if value is mapping %}
+                        <table class="nested-table">
+                            {% for k2, v2 in value.items() %}
+                                <tr>
+                                    <td>{{ k2 }}</td>
+                                    <td>{{ v2 }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% elif value is iterable and value is not string %}
+                        <ul>
+                        {% for item in value %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        {{ value }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <pre>{{ data }}</pre>
+    {% endif %}
+</section>
+{% endif %}
+<style>
+.financial-form { margin-bottom: 1rem; }
+.financial-form input { padding: 0.4rem; margin-right: 0.5rem; }
+.financial-table, .nested-table { border-collapse: collapse; width: 100%; }
+.financial-table th, .financial-table td, .nested-table td { border: 1px solid #ddd; padding: 0.5rem; }
+.financial-table th { background: #F5F5F5; text-align: left; }
+.nested-table { width: auto; margin: 0.25rem 0; }
+</style>
+{% endblock %}

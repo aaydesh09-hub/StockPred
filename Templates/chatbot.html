@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Chatbot</h2>
+<div id="chatbox"></div>
+<input id="msg" placeholder="Type message...">
+<button onclick="sendMessage()">Send</button>
+<script >async function sendMessage() {
+    const input = document.getElementById("msg");
+    const msg = input.value;
+    const chatbox = document.getElementById("chatbox");
+    chatbox.innerHTML += `<p><b>You:</b> ${msg}</p>`;
+    const res = await fetch("/chat_api", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: msg})
+    });
+    const data = await res.json();
+    chatbox.innerHTML += `<p><b>Bot:</b> ${data.reply}</p>`;
+    input.value = "";
+}
+</script>
+{% endblock %}
