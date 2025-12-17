@@ -1,61 +1,265 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
 {% block content %}
-<h1>Financials</h1>
-<form method="post" action="/financials" class="financial-form">
-    <label for="symbol">Ticker symbol (e.g. AAPL):</label>
-    <input id="symbol" name="symbol" type="text" placeholder="Enter ticker symbol" required>
-    <button type="submit">Get Financials</button>
-</form>
-{% if data %}
-<section class="financial-results">
-    <h2>{{ data.get('name') or data.get('symbol') or 'Result' }}</h2>
-    {% if data is mapping %}
-    <table class="financial-table">
-        <thead>
-            <tr>
-                <th>Metric</th>
-                <th>Value</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for key, value in data.items() %}
-            <tr>
-                <td>{{ key }}</td>
-                <td>
-                    {% if value is mapping %}
-                        <table class="nested-table">
-                            {% for k2, v2 in value.items() %}
-                                <tr>
-                                    <td>{{ k2 }}</td>
-                                    <td>{{ v2 }}</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    {% elif value is iterable and value is not string %}
-                        <ul>
-                        {% for item in value %}
-                            <li>{{ item }}</li>
-                        {% endfor %}
-                        </ul>
-                    {% else %}
-                        {{ value }}
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-        <pre>{{ data }}</pre>
-    {% endif %}
-</section>
-{% endif %}
+
 <style>
-.financial-form { margin-bottom: 1rem; }
-.financial-form input { padding: 0.4rem; margin-right: 0.5rem; }
-.financial-table, .nested-table { border-collapse: collapse; width: 100%; }
-.financial-table th, .financial-table td, .nested-table td { border: 1px solid #ddd; padding: 0.5rem; }
-.financial-table th { background: #F5F5F5; text-align: left; }
-.nested-table { width: auto; margin: 0.25rem 0; }
+    body {
+        background: linear-gradient(135deg, #1f2933, #111827);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #e5e7eb;
+    }
+
+    /* Page layout */
+    .financial-layout {
+        display: flex;
+        max-width: 1200px;
+        margin: 60px auto;
+        gap: 24px;
+        padding: 0 20px;
+    }
+
+    /* Side navigation */
+    .side-nav {
+        width: 220px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        height: fit-content;
+    }
+
+    .side-nav h3 {
+        margin-top: 0;
+        margin-bottom: 16px;
+        font-size: 1.1rem;
+        color: #f9fafb;
+    }
+
+    .side-nav a {
+        display: block;
+        margin-bottom: 12px;
+        padding: 12px 16px;
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        text-align: center;
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .side-nav a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.5);
+    }
+
+    /* Main content */
+    .financial-container {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Dot pattern */
+    .financial-container::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(
+            rgba(255, 255, 255, 0.08) 1px,
+            transparent 1px
+        );
+        background-size: 24px 24px;
+        opacity: 0.25;
+        pointer-events: none;
+    }
+
+    h1 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #f9fafb;
+    }
+
+    /* Form styling */
+    .financial-form {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        margin-bottom: 32px;
+        flex-wrap: wrap;
+    }
+
+    .financial-form label {
+        width: 100%;
+        font-size: 0.9rem;
+        color: #d1d5db;
+    }
+
+    .financial-form input {
+        flex: 1;
+        padding: 14px 16px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        font-size: 0.95rem;
+        background: rgba(255, 255, 255, 0.08);
+        color: #f9fafb;
+    }
+
+    .financial-form input::placeholder {
+        color: #9ca3af;
+    }
+
+    .financial-form button {
+        padding: 14px 22px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #10b981, #047857);
+        color: #ffffff;
+        font-weight: 500;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .financial-form button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 26px rgba(16, 185, 129, 0.5);
+    }
+
+    /* Results */
+    .financial-results h2 {
+        margin-top: 0;
+        color: #93c5fd;
+    }
+
+    /* Tables */
+    .financial-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+        background: rgba(0, 0, 0, 0.35);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .financial-table th,
+    .financial-table td {
+        padding: 12px 14px;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .financial-table th {
+        background: rgba(255, 255, 255, 0.06);
+        color: #f9fafb;
+        font-weight: 500;
+    }
+
+    .financial-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Nested tables */
+    .nested-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+    }
+
+    .nested-table td {
+        padding: 8px 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        font-size: 0.9rem;
+    }
+
+    .nested-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    ul {
+        padding-left: 18px;
+        margin: 0;
+    }
+
+    pre {
+        background: rgba(0, 0, 0, 0.35);
+        padding: 16px;
+        border-radius: 10px;
+        overflow-x: auto;
+    }
 </style>
+
+<div class="financial-layout">
+    <div class="side-nav">
+        <h3>Navigation</h3>
+        <a href="/">Home</a>
+        <a href="/chat">Chatbot</a>
+        <a href="/data">Stored Data</a>
+    </div>
+
+    <div class="financial-container">
+        <h1>Financials</h1>
+
+        <form method="post" action="/financials" class="financial-form">
+            <label for="symbol">Ticker symbol (e.g. AAPL):</label>
+            <input id="symbol" name="symbol" type="text" placeholder="Enter ticker symbol" required>
+            <button type="submit">Get Financials</button>
+        </form>
+
+        {% if data %}
+        <section class="financial-results">
+            <h2>{{ data.get('name') or data.get('symbol') or 'Result' }}</h2>
+
+            {% if data is mapping %}
+            <table class="financial-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for key, value in data.items() %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>
+                            {% if value is mapping %}
+                                <table class="nested-table">
+                                    {% for k2, v2 in value.items() %}
+                                        <tr>
+                                            <td>{{ k2 }}</td>
+                                            <td>{{ v2 }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            {% elif value is iterable and value is not string %}
+                                <ul>
+                                {% for item in value %}
+                                    <li>{{ item }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% else %}
+                                {{ value }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <pre>{{ data }}</pre>
+            {% endif %}
+        </section>
+        {% endif %}
+    </div>
+</div>
+
 {% endblock %}

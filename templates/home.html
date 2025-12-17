@@ -1,32 +1,89 @@
 {% extends "base.html" %}
 {% block content %}
+
 <style>
-    h1{
-        color: rgb(52, 99, 121);
-        margin-left: 20px;
-        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    /* Page background */
+    body {
+        background: linear-gradient(135deg, #1f2933, #111827);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #e5e7eb;
     }
-    p{
-        color: rgb(52, 99, 121);
-        margin-left: 20px;
-        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+
+    /* Main container */
+    .dashboard-container {
+        max-width: 700px;
+        margin: 80px auto;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 16px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        position: relative;
+        overflow: hidden;
     }
-    ul{
-        color: rgb(3, 114, 86);
-        margin-left: 20px;
-        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+
+    /* Subtle background pattern */
+    .dashboard-container::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(
+            rgba(255, 255, 255, 0.08) 1px,
+            transparent 1px
+        );
+        background-size: 24px 24px;
+        opacity: 0.3;
+        pointer-events: none;
     }
-    a{
-        color: rgb(3, 114, 86);
-        margin-left: 20px;
-        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+
+    /* Headings */
+    h1 {
+        font-size: 2.2rem;
+        margin-bottom: 12px;
+        color: #f9fafb;
+    }
+
+    p {
+        margin-bottom: 32px;
+        color: #d1d5db;
+    }
+
+    /* Navigation list */
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 16px;
+    }
+
+    /* Link boxes */
+    li a {
+        display: block;
+        padding: 16px 20px;
+        background: linear-gradient(135deg, #2563eb, #1e40af);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 12px;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+    }
+
+    li a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.5);
     }
 </style>
-<h1>Welcome to Your Finance Chatbot Dashboard</h1>
-<p>Select what you want to do:</p>
-<ul>
-    <li><a href="/chat">Open Chatbot</a></li>
-    <li><a href="/financials">Search Stock Financials</a></li>
-    <li><a href="/data">View Stored Data</a></li>
-</ul>
+
+<div class="dashboard-container">
+    <h1>Welcome to Your Finance Chatbot Dashboard</h1>
+    <p>Select what you want to do:</p>
+    <ul>
+        <li><a href="/chat">Open Chatbot</a></li>
+        <li><a href="/financials">Search Stock Financials</a></li>
+        <li><a href="/data">View Stored Data</a></li>
+    </ul>
+</div>
+
 {% endblock %}
