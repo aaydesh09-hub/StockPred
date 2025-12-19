@@ -2,264 +2,209 @@
 {% block content %}
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap');
+
     body {
-        background: linear-gradient(135deg, #1f2933, #111827);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        color: #e5e7eb;
-    }
-
-    /* Page layout */
-    .financial-layout {
+        min-height: 100vh;
+        margin: 0;
+        background:
+            linear-gradient(rgba(6,20,24,0.9), rgba(6,20,24,0.9)),
+            url("https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGNyeXB0b2N1cnJlbmN5fGVufDB8fDB8fHww");
+        background-size: cover;
+        background-position: center;
+        font-family: 'Julius Sans One', sans-serif;
+        color: #f0fdfa;
         display: flex;
-        max-width: 1200px;
-        margin: 60px auto;
-        gap: 24px;
-        padding: 0 20px;
-    }
-
-    /* Side navigation */
-    .side-nav {
-        width: 220px;
-        background: rgba(255, 255, 255, 0.04);
-        border-radius: 16px;
+        align-items: center;
+        justify-content: center;
         padding: 24px;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-        height: fit-content;
-    }
-
-    .side-nav h3 {
-        margin-top: 0;
-        margin-bottom: 16px;
-        font-size: 1.1rem;
-        color: #f9fafb;
-    }
-
-    .side-nav a {
-        display: block;
-        margin-bottom: 12px;
-        padding: 12px 16px;
-        background: linear-gradient(135deg, #2563eb, #1e40af);
-        color: #ffffff;
-        text-decoration: none;
-        border-radius: 10px;
-        font-size: 0.95rem;
-        text-align: center;
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .side-nav a:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.5);
-    }
-
-    /* Main content */
-    .financial-container {
-        flex: 1;
-        background: rgba(255, 255, 255, 0.04);
-        border-radius: 16px;
-        padding: 32px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
-        position: relative;
         overflow: hidden;
     }
 
-    /* Dot pattern */
-    .financial-container::before {
-        content: "";
-        position: absolute;
+    /* Ambient logos */
+    .ambient-logos {
+        position: fixed;
         inset: 0;
-        background-image: radial-gradient(
-            rgba(255, 255, 255, 0.08) 1px,
-            transparent 1px
-        );
-        background-size: 24px 24px;
-        opacity: 0.25;
         pointer-events: none;
+        z-index: 0;
     }
 
-    h1 {
-        margin-top: 0;
-        margin-bottom: 20px;
-        color: #f9fafb;
+    .ambient-logos img {
+        position: absolute;
+        filter: invert(1);
+        opacity: 0.15;
+        animation: float 10s ease-in-out infinite;
     }
 
-    /* Form styling */
+    .a1  { top: 5%; left: 8%; width: 40px; }
+    .a2  { top: 12%; right: 10%; width: 64px; }
+    .a3  { top: 22%; left: 20%; width: 52px; }
+    .a4  { top: 30%; right: 22%; width: 36px; }
+    .a5  { top: 40%; left: 6%; width: 70px; }
+    .a6  { top: 48%; right: 6%; width: 46px; }
+    .a7  { top: 58%; left: 18%; width: 32px; }
+    .a8  { top: 65%; right: 28%; width: 60px; }
+    .a9  { bottom: 22%; left: 10%; width: 48px; }
+    .a10 { bottom: 18%; right: 12%; width: 38px; }
+    .a11 { bottom: 8%; left: 28%; width: 72px; }
+    .a12 { bottom: 12%; right: 32%; width: 44px; }
+    .a13 { top: 18%; right: 38%; width: 34px; }
+    .a14 { top: 72%; left: 40%; width: 58px; }
+    .a15 { top: 50%; left: 50%; width: 30px; }
+
+    /* Main shell */
+    .financial-shell {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 1500px;
+        height: min(82vh, 920px);
+        padding: 48px 64px 28px;
+        border-radius: 28px;
+        background: rgba(255,255,255,0.02);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .financial-title {
+        text-align: center;
+        font-size: clamp(2.2rem, 3.8vw, 2.8rem);
+        letter-spacing: 0.45em;
+        text-transform: uppercase;
+        color: #ffffff;
+        margin-bottom: 36px;
+    }
+
+    /* Form */
     .financial-form {
         display: flex;
-        gap: 12px;
-        align-items: flex-end;
-        margin-bottom: 32px;
+        gap: 16px;
         flex-wrap: wrap;
+        margin-bottom: 32px;
     }
 
     .financial-form label {
         width: 100%;
-        font-size: 0.9rem;
-        color: #d1d5db;
+        font-size: 0.75rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #9ff3ec;
     }
 
+    /* 🔒 Input styling FIX (all states) */
     .financial-form input {
         flex: 1;
-        padding: 14px 16px;
-        border-radius: 10px;
+        padding: 16px 18px;
+        border-radius: 14px;
         border: none;
         outline: none;
-        font-size: 0.95rem;
-        background: rgba(255, 255, 255, 0.08);
-        color: #f9fafb;
+        font-family: inherit;
+        font-size: 0.85rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        background: rgba(255,255,255,0.06);
+        color: #ffffff;
+        box-shadow: inset 0 0 0 1px rgba(20,184,166,0.35);
     }
 
-    .financial-form input::placeholder {
-        color: #9ca3af;
+    .financial-form input:focus,
+    .financial-form input:active,
+    .financial-form input:not(:placeholder-shown) {
+        background: rgba(255,255,255,0.06);
+        color: #ffffff;
+        box-shadow: inset 0 0 0 1px rgba(250,204,21,0.65);
+    }
+
+    /* Autofill fix (Chrome) */
+    input:-webkit-autofill {
+        -webkit-text-fill-color: #ffffff;
+        transition: background-color 9999s ease-in-out 0s;
+        box-shadow: inset 0 0 0 1px rgba(250,204,21,0.65);
     }
 
     .financial-form button {
-        padding: 14px 22px;
+        padding: 16px 26px;
+        border-radius: 999px;
         border: none;
-        border-radius: 10px;
-        background: linear-gradient(135deg, #10b981, #047857);
+        font-family: inherit;
+        font-size: 0.75rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, #14b8a6, #0f766e);
         color: #ffffff;
-        font-weight: 500;
         cursor: pointer;
-        box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .financial-form button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 26px rgba(16, 185, 129, 0.5);
+    .bottom-nav {
+        display: flex;
+        justify-content: center;
+        gap: 28px;
+        margin-top: 22px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(20,184,166,0.25);
     }
 
-    /* Results */
-    .financial-results h2 {
-        margin-top: 0;
-        color: #93c5fd;
+    .bottom-nav a {
+        font-size: 0.7rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: #9ff3ec;
+        text-decoration: none;
     }
 
-    /* Tables */
-    .financial-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 16px;
-        background: rgba(0, 0, 0, 0.35);
-        border-radius: 12px;
-        overflow: hidden;
+    @keyframes float {
+        0%,100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
     }
 
-    .financial-table th,
-    .financial-table td {
-        padding: 12px 14px;
-        text-align: left;
-        vertical-align: top;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .financial-table th {
-        background: rgba(255, 255, 255, 0.06);
-        color: #f9fafb;
-        font-weight: 500;
-    }
-
-    .financial-table tr:last-child td {
-        border-bottom: none;
-    }
-
-    /* Nested tables */
-    .nested-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 6px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-    }
-
-    .nested-table td {
-        padding: 8px 10px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        font-size: 0.9rem;
-    }
-
-    .nested-table tr:last-child td {
-        border-bottom: none;
-    }
-
-    ul {
-        padding-left: 18px;
-        margin: 0;
-    }
-
-    pre {
-        background: rgba(0, 0, 0, 0.35);
-        padding: 16px;
-        border-radius: 10px;
-        overflow-x: auto;
+    @media (max-width: 768px) {
+        .ambient-logos { display: none; }
+        .financial-shell { height: auto; padding: 36px 28px 22px; }
+        .financial-form { flex-direction: column; }
     }
 </style>
 
-<div class="financial-layout">
-    <div class="side-nav">
-        <h3>Navigation</h3>
+<!-- Ambient logos -->
+<div class="ambient-logos">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/apple.svg" class="a1">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/microsoft.svg" class="a2">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/tesla.svg" class="a3">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/shopify.svg" class="a4">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/stripe.svg" class="a5">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/airbnb.svg" class="a6">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/nvidia.svg" class="a7">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/intel.svg" class="a8">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/paypal.svg" class="a9">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/coinbase.svg" class="a10">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/ford.svg" class="a11">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/target.svg" class="a12">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/salesforce.svg" class="a13">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/adobe.svg" class="a14">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/uber.svg" class="a15">
+</div>
+
+<div class="financial-shell">
+
+    <div class="financial-title">Financials</div>
+
+    <form method="post" action="/financials" class="financial-form">
+        <label for="symbol">Ticker Symbol</label>
+        <input id="symbol" name="symbol" type="text" placeholder="AAPL" required>
+        <button type="submit">Get Financials</button>
+    </form>
+
+    {% if data %}
+        {{ super() }}
+    {% endif %}
+
+    <div class="bottom-nav">
         <a href="/">Home</a>
         <a href="/chat">Chatbot</a>
-        <a href="/data">Stored Data</a>
+        <a href="/data">Data</a>
     </div>
 
-    <div class="financial-container">
-        <h1>Financials</h1>
-
-        <form method="post" action="/financials" class="financial-form">
-            <label for="symbol">Ticker symbol (e.g. AAPL):</label>
-            <input id="symbol" name="symbol" type="text" placeholder="Enter ticker symbol" required>
-            <button type="submit">Get Financials</button>
-        </form>
-
-        {% if data %}
-        <section class="financial-results">
-            <h2>{{ data.get('name') or data.get('symbol') or 'Result' }}</h2>
-
-            {% if data is mapping %}
-            <table class="financial-table">
-                <thead>
-                    <tr>
-                        <th>Metric</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for key, value in data.items() %}
-                    <tr>
-                        <td>{{ key }}</td>
-                        <td>
-                            {% if value is mapping %}
-                                <table class="nested-table">
-                                    {% for k2, v2 in value.items() %}
-                                        <tr>
-                                            <td>{{ k2 }}</td>
-                                            <td>{{ v2 }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                            {% elif value is iterable and value is not string %}
-                                <ul>
-                                {% for item in value %}
-                                    <li>{{ item }}</li>
-                                {% endfor %}
-                                </ul>
-                            {% else %}
-                                {{ value }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-                <pre>{{ data }}</pre>
-            {% endif %}
-        </section>
-        {% endif %}
-    </div>
 </div>
 
 {% endblock %}
