@@ -64,6 +64,7 @@
         background: rgba(255,255,255,0.02);
         backdrop-filter: blur(16px);
         box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+        overflow-y: auto;
         display: flex;
         flex-direction: column;
     }
@@ -73,7 +74,7 @@
         font-size: clamp(2.2rem, 3.8vw, 2.8rem);
         letter-spacing: 0.45em;
         text-transform: uppercase;
-        color: #ffffff;
+        color: #facc15;
         margin-bottom: 36px;
     }
 
@@ -196,7 +197,134 @@
     </form>
 
     {% if data %}
-        {{ super() }}
+        <style>
+    .data-container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 2rem;
+        color: #E5E7EB;
+    }
+    .section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 14px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .section h2 {
+        margin-bottom: 1rem;
+        color: #14B8A6;
+        letter-spacing: 0.15em;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+    }
+    td {
+        padding: 0.6rem;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        vertical-align: top;
+    }
+    td.key {
+        width: 30%;
+        color: #9FF3EC;
+        font-weight: 600;
+    }
+    ul {
+        padding-left: 1.2rem;
+    }
+    li {
+        margin-bottom: 0.4rem;
+    }
+    .badge {
+        display: inline-block;
+        padding: 0.3rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+        background: #0F766E;
+        color: white;
+    }
+</style>
+<div class="data-container">
+    <!-- SYMBOL --> {% if data %}
+    <div class="section">
+        <h2>Symbol</h2>
+        <span class="badge">{{ data.symbol }}</span>
+    </div>
+    <!-- QUOTE -->
+    <div class="section">
+        <h2>Quote</h2>
+        <table>
+            {% for k, v in data.quote.items() %}
+            <tr>
+                <td class="key">{{ k }}</td>
+                <td>{{ v }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <!-- SENTIMENT -->
+    <div class="section">
+        <h2>Sentiment</h2>
+        <table>
+            <tr>
+                <td class="key">Score</td>
+                <td>{{ data.sentiment }}</td>
+            </tr>
+            <tr>
+                <td class="key">Label</td>
+                <td><span class="badge">{{ data.label }}</span></td>
+            </tr>
+        </table>
+    </div>
+    <!-- INSIDER -->
+    <div class="section">
+        <h2>Insider Activity</h2>
+        {% if data.insider %}
+        <table>
+            {% for k, v in data.insider.items() %}
+            <tr>
+                <td class="key">{{ k }}</td>
+                <td>{{ v }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <p>No insider data available</p>
+        {% endif %}
+    </div>
+    <!-- NEWS -->
+    <div class="section">
+        <h2>General News</h2>
+        <ul>
+            {% for item in data.news %}
+            <li>
+                <strong>{{ item.title }}</strong><br>
+                <small>{{ item.source }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- ARTICLES -->
+    <div class="section">
+        <h2>Articles</h2>
+        <ul>
+            {% for article in data.articles %}
+            <li>
+                <a href="{{ article.url }}" target="_blank">
+                    {{ article.title }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% else %}
+    <p style = "text-align:center; opacity: 0.6;"> Please Enter A Symbol To View Details. </p>
+{% endif %}
     {% endif %}
 
     <div class="bottom-nav">
@@ -207,4 +335,8 @@
 
 </div>
 
+
 {% endblock %}
+
+
+
