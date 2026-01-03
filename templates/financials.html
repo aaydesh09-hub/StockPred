@@ -283,18 +283,52 @@
     <!-- INSIDER -->
     <div class="section">
         <h2>Insider Activity</h2>
-        {% if data.insider %}
+        {% if data.insider and data.insider|length > 0 %}
+    <div style="overflow-x:auto;">
         <table>
-            {% for k, v in data.insider.items() %}
-            <tr>
-                <td class="key">{{ k }}</td>
-                <td>{{ v }}</td>
-            </tr>
-            {% endfor %}
+            <thead>
+                <tr>
+                    <td class="key">Name</td>
+                    <td class="key">Type</td>
+                    <td class="key">Change</td>
+                    <td class="key">Shares After</td>
+                    <td class="key">Price</td>
+                    <td class="key">Txn Date</td>
+                    <td class="key">Filed</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data.insider %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>
+                        {% set code = item.transactionCode %}
+                        <span class="badge">
+                            {{ code }}
+                        </span>
+                    </td>
+                    <td style="color: #16A34A;">
+                        {{ item.change }}
+                    </td>
+                    <td>{{ item.share }}</td>
+                    <td>
+                        {% if item.transactionPrice and item.transactionPrice > 0 %}
+                            ${{ item.transactionPrice }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td>{{ item.transactionDate }}</td>
+                    <td>{{ item.filingDate }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
-        {% else %}
-        <p>No insider data available</p>
-        {% endif %}
+    </div>
+    {% else %}
+        <p style="opacity:0.6;">No insider trading data available.</p>
+    {% endif %}
+</div>
     </div>
     <!-- NEWS -->
     <div class="section">
