@@ -332,16 +332,23 @@
     </div>
     <!-- NEWS -->
     <div class="section">
-        <h2>General News</h2>
-        <ul>
-            {% for item in data.news %}
-            <li>
-                <strong>{{ item.title }}</strong><br>
-                <small>{{ item.source }}</small>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+    <h2>General News</h2>
+    {% if data.news and data.news|length > 0 %}
+        {% for article in data.news %}
+        <div class="news-card">
+            <h3>{{ article.headline }}</h3>
+            <p class="news-meta">
+                <strong>{{ article.source }}</strong> •
+                {{ article.datetime }}
+            </p>
+            <p>{{ article.summary }}</p>
+            <a href="{{ article.url }}" target="_blank">Read full article →</a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No news available</p>
+    {% endif %}
+</div>
     <!-- ARTICLES -->
     <div class="section">
         <h2>Articles</h2>
@@ -364,7 +371,6 @@
     <div class="bottom-nav">
         <a href="/">Home</a>
         <a href="/chat">Chatbot</a>
-        <a href="/data">Data</a>
     </div>
 
 </div>

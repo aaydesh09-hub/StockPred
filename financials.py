@@ -113,12 +113,17 @@ def get_financials(symbol):
     except:
         general_news = []
     try:
-        insider = finnhub_client.stock_insider_transactions(symbol)
+        insider_data = finnhub_client.stock_insider_transactions(symbol)
+        insider = insider_data.get("data",[])
     except:
         insider = []
     # Marketaux news
     try:
-        articles = news(symbol)
+        articles_df = news(symbol)
+        if isinstance(articles_df, pd.DataFrame):
+            articles = articles_df.to_dict(orient = "records")
+        else:
+            articles = articles_df
     except:
         articles = []
     return {

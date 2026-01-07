@@ -6,7 +6,7 @@ import os
 # -----------------------------
 # Gemini Configuration
 # -----------------------------
-genai.configure(api_key="AIzaSyDI_TUeBHkbbg70mnmCfCC66FFSTp2HlxI")  # replace later
+genai.configure(api_key=os.getenv("API_KEY"))  # replace later
 tools = [{
     "name": "get_financials",
     "description": "Fetch stock financial, insider trades, sentiment and news",
